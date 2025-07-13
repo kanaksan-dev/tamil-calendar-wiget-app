@@ -1,70 +1,210 @@
-# Getting Started with Create React App
+# Tamil Calendar Widget Demo App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A simple React application demonstrating the usage of [`@kanaksan/tamil-calendar-widget`](https://www.npmjs.com/package/@kanaksan/tamil-calendar-widget) npm package. This app displays Tamil daily calendar sheets (Panchangam) with auspicious timings, festivals, and traditional Tamil calendar information.
 
-## Available Scripts
+## 🎯 Purpose
 
-In the project directory, you can run:
+This demo app showcases how to:
+- Integrate the Tamil Calendar Widget into React applications
+- Display Tamil daily calendar sheets for any selected date
+- Connect with backend APIs that serve Tamil calendar images
+- Handle date selection and widget interactions
 
-### `npm start`
+## ✨ Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **Interactive Date Selection**: Choose any date using the date picker
+- **Tamil Calendar Display**: Shows traditional Tamil Panchangam with daily information
+- **Responsive Design**: Works on desktop and mobile devices
+- **Error Handling**: Graceful error handling with user-friendly messages
+- **Loading States**: Smooth loading indicators while fetching calendar data
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🚀 Quick Start
 
-### `npm test`
+### Prerequisites
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- Node.js 16+ 
+- npm or yarn
+- Backend API serving Tamil calendar images (optional for testing)
 
-### `npm run build`
+### Installation
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd tamil-calendar-app
+   ```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+3. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
 
-### `npm run eject`
+4. **Open your browser:**
+   Navigate to `http://localhost:3000`
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## 🏗️ Project Structure
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+```
+tamil-calendar-app/
+├── src/
+│   ├── App.jsx          # Main application component
+│   └── main.jsx         # Application entry point
+├── index.html           # HTML template
+├── vite.config.js       # Vite configuration
+├── package.json         # Dependencies and scripts
+└── README.md            # This file
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## 🔧 Configuration
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Backend API Setup
 
-## Learn More
+The widget expects a backend API that serves Tamil calendar images. Update the `apiUrl` in `App.jsx`:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+```javascript
+// For local development
+<TamilCalendarWidget 
+  apiUrl="http://localhost:8082/api/calendar/daily-sheet"
+  date={date}
+  width={400}
+/>
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+// For production
+<TamilCalendarWidget 
+  apiUrl="https://your-api-domain.com/api/calendar/daily-sheet"
+  date={date}
+  width={400}
+/>
+```
 
-### Code Splitting
+### Proxy Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+For local development with CORS, the Vite proxy is configured in `vite.config.js`:
 
-### Analyzing the Bundle Size
+```javascript
+server: {
+  proxy: {
+    '/api': {
+      target: 'http://localhost:8082',
+      changeOrigin: true,
+      secure: false
+    }
+  }
+}
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## 📦 Widget Usage
 
-### Making a Progressive Web App
+Basic usage of the Tamil Calendar Widget:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```javascript
+import React, { useState } from 'react'
+import { TamilCalendarWidget } from '@kanaksan/tamil-calendar-widget'
 
-### Advanced Configuration
+function MyApp() {
+  const [date, setDate] = useState('2025-07-13')
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+  return (
+    <TamilCalendarWidget 
+      apiUrl="/api/calendar/daily-sheet"
+      date={date}
+      width={400}
+      onLoad={() => console.log('Calendar loaded')}
+      onError={(error) => console.error('Error:', error)}
+    />
+  )
+}
+```
 
-### Deployment
+### Widget Props
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `apiUrl` | string | **required** | Backend API URL for calendar images |
+| `date` | string | **required** | Date in YYYY-MM-DD format |
+| `width` | number | `400` | Widget width in pixels |
+| `height` | number | `auto` | Widget height in pixels |
+| `onLoad` | function | - | Callback when calendar loads successfully |
+| `onError` | function | - | Callback when calendar fails to load |
+| `showLoader` | boolean | `true` | Show loading indicator |
+| `className` | string | - | Additional CSS class name |
+| `style` | object | - | Inline styles for container |
 
-### `npm run build` fails to minify
+## 🛠️ Available Scripts
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build |
+| `npm run clean` | Clean node_modules and cache |
+
+## 🔗 API Requirements
+
+The backend API should:
+
+1. **Accept date parameter**: `GET /api/calendar/daily-sheet/{date}`
+2. **Return image data**: JPEG/PNG format
+3. **Include CORS headers**: For browser compatibility
+4. **Handle errors gracefully**: Return appropriate HTTP status codes
+
+Example API response headers:
+```
+Content-Type: image/jpeg
+Content-Length: 117447
+Cache-Control: public, max-age=86400
+Access-Control-Allow-Origin: *
+```
+
+## 🌟 Tamil Calendar Information
+
+The widget displays traditional Tamil calendar information including:
+- **Panchangam**: Daily astrological calendar
+- **Tithi**: Lunar day
+- **Nakshatra**: Star constellation
+- **Yoga**: Auspicious combinations
+- **Karana**: Half lunar day
+- **Subha Muhurtham**: Auspicious timings
+- **Rahukalam**: Inauspicious time periods
+- **Festival Days**: Hindu festivals and events
+- **Auspicious Days**: Pradosham, Ekadasi, Amavasai, etc.
+
+## 🤝 Related Packages
+
+- **[@kanaksan/tamil-calendar-widget](https://www.npmjs.com/package/@kanaksan/tamil-calendar-widget)**: The main widget package
+- **[Tamil Calendar Widget Documentation](https://github.com/kanaksan/tamil-calendar-widget)**: Detailed widget documentation
+
+## 🐛 Troubleshooting
+
+### Common Issues
+
+1. **Widget not displaying**: Check API URL and CORS configuration
+2. **Blank page**: Verify React version compatibility (18.x recommended)
+3. **Network errors**: Ensure backend API is running and accessible
+4. **Date format errors**: Use YYYY-MM-DD format for dates
+
+### Debug Steps
+
+1. Check browser console for errors
+2. Verify API response in Network tab
+3. Ensure widget callbacks are triggered
+4. Test with direct image URL
+
+## 📄 License
+
+MIT License - feel free to use this demo app as a starting point for your own Tamil calendar applications.
+
+## 🙏 Acknowledgments
+
+- Tamil calendar data and formatting
+- Traditional Panchangam calculations
+- Tamil cultural calendar systems
+
+---
+
+**Note**: This is a demo application. For production use, ensure proper error handling, security measures, and performance optimizations.
